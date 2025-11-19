@@ -20,19 +20,7 @@ exists so that future runs are reproducible and easy to repeat or hand over.
   about which epochs each source is used in.
 - Prints a human-readable summary of scan lengths and total project time.
 
-## Dependencies
-
-- Python 3.x
-- `numpy`
-- `pandas`
-
-Install them with:
-
-```bash
-pip install -r requirements.txt
-```
-
-## `check_opt_json.py` doc_string:
+## main script doc_string:
 Audit Open Time proposal schedule blocks using JSON epoch files exported from the OPT.
 The user must first 'simulate' each schedule block in the OPT and save the resulting JSON
 files locally. These files contain the detailed observation sequence and timing information
@@ -50,4 +38,16 @@ Example:
         --master-csv 2025/observations/testing/targets-SCI-20241101-SB-01.csv \\
         --epoch-json 2025/observations/testing/SCI-20241101-SB-01_*.json \\
         --show-target-scans
+```
+
+## Dependencies
+
+- Python 3.x
+- `numpy`
+- `pandas`
+
+Install them with:
+
+```bash
+pip install -r requirements.txt
 ```
