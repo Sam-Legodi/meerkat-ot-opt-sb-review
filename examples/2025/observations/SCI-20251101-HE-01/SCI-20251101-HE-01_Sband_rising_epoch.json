@@ -1,0 +1,281 @@
+{
+    "name": "",
+    "id": 20251118172051,
+    "tag": null,
+    "description": "IC 3476 S-band 2 (rising)",
+    "intensityNoiseDiode": {
+        "antennas": "all",
+        "leadTime": 12,
+        "onFrac": 0.03,
+        "cycleLen": 19.5
+    },
+    "linked_Observation": {
+        "id": ""
+    },
+    "scanParameters": {
+        "ra1": "00:00:00.000",
+        "ra2": "00:00:00.000",
+        "ra3": "00:00:00.000",
+        "ra4": "00:00:00.000",
+        "dec1": "00:00:00.000",
+        "dec2": "00:00:00.000",
+        "dec3": "00:00:00.000",
+        "dec4": "00:00:00.000",
+        "scanSpeed": 7,
+        "direction": 0,
+        "projectionValue": "plate-carree"
+    },
+    "proposal_id": "SCI-20251101-HE-01",
+    "state": "SUBMITTED",
+    "owner": "",
+    "owner_email": "",
+    "sb_id": 94728,
+    "calendar_event_url": null,
+    "obs_setup": {
+        "preferred_dates": [],
+        "avoid_dates": [],
+        "mandatory_night_obs": false,
+        "avoid_sunrise_sunset": false,
+        "baseline_requirements": "",
+        "minimum_antennas": 58,
+        "general_comments": ""
+    },
+    "refPointing": {
+        "extent": 1,
+        "numPointings": 9
+    },
+    "adjPointing": {
+        "adjustPointing": true,
+        "maxAge": 3600,
+        "maxDist": 15
+    },
+    "instrument": {
+        "enabled": true,
+        "product": "c875M4k",
+        "integration_time": "8.00",
+        "band": "s",
+        "center_freq": "2843.75",
+        "pool_resources": [
+            "cbf",
+            "sdp"
+        ],
+        "config_auth_host": "MeerTRAP"
+    },
+    "noise_diode": {
+        "enabled": false,
+        "pattern": "all",
+        "on_fraction": null,
+        "cycle_len": null
+    },
+    "quality_assurance": {
+        "qa1": null,
+        "qa2": null,
+        "qa_code": null,
+        "qa_notes": null,
+        "qa_comments": null
+    },
+    "horizon": 15,
+    "lst_start": "08:50",
+    "lst_start_end": "09:46",
+    "desired_start_time": "2025-12-01 02:48:00.000Z",
+    "last_simulation": "2025-12-01 02:48:00Z - Setting up telescope for observation\n2025-12-01 02:48:00Z - Observation start up\n2025-12-01 02:48:00Z - Running astrokat version - 0.1.dev921+head.cd6adb4\n2025-12-01 02:48:00Z - Skipping instrument checks - approved_schedule does not exist\n2025-12-01 02:48:00Z - Found 5 target(s): 0 from 0 catalogue(s), 0 from default catalogue and 20 as target string(s)\n2025-12-01 02:48:00Z - FLUX calibrators are ['J0408-6545', 'J1939-6342']\n2025-12-01 02:48:00Z - DELAY calibrators are ['J0408-6545', 'J1939-6342']\n2025-12-01 02:48:00Z - POL calibrators are ['J1331+3030']\n2025-12-01 02:48:00Z - BP calibrators are ['J0408-6545', 'J1939-6342']\n2025-12-01 02:48:00Z - GAIN calibrators are ['J1347+1217']\n2025-12-01 02:48:00Z - Observation targets are ['IC 3476']\n2025-12-01 02:48:00Z - Waiting for observation setup\n2025-12-01 02:48:03Z - INIT\n2025-12-01 02:48:03Z - Slewing to first target\n2025-12-01 02:48:48Z - Slewed to J0408-6545 at azel (208.6, 35.3) deg\n2025-12-01 02:48:48Z - Tracked J0408-6545 for 0 seconds\n2025-12-01 02:48:48Z - Initialising Track fluxcal, bpcal, delaycal J0408-6545 for 600.0 sec\n2025-12-01 02:48:48Z - Slewed to J0408-6545 at azel (208.6, 35.2) deg\n2025-12-01 02:58:48Z - Tracked J0408-6545 for 600 seconds\n2025-12-01 02:58:48Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 03:00:14Z - Slewed to IC 3476 at azel (56.3, 22.9) deg\n2025-12-01 03:30:14Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 03:30:14Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 03:30:39Z - Slewed to J1347+1217 at azel (64.9, 15.9) deg\n2025-12-01 03:32:39Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 03:32:39Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 03:33:04Z - Slewed to IC 3476 at azel (49.8, 28.8) deg\n2025-12-01 04:03:04Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 04:03:04Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 04:03:27Z - Slewed to J1347+1217 at azel (59.5, 22.2) deg\n2025-12-01 04:05:27Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 04:05:27Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 04:05:51Z - Slewed to IC 3476 at azel (42.6, 33.9) deg\n2025-12-01 04:35:51Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 04:35:51Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 04:36:13Z - Slewed to J1347+1217 at azel (53.5, 28.1) deg\n2025-12-01 04:38:13Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 04:38:13Z - Initialising Track polcal J1331+3030 for 600.0 sec\n2025-12-01 04:38:37Z - Slewed to J1331+3030 at azel (37.0, 17.1) deg\n2025-12-01 04:48:37Z - Tracked J1331+3030 for 600 seconds\n2025-12-01 04:48:37Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 04:49:11Z - Slewed to IC 3476 at azel (31.6, 39.5) deg\n2025-12-01 05:19:11Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 05:19:11Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 05:19:32Z - Slewed to J1347+1217 at azel (44.1, 35.1) deg\n2025-12-01 05:21:32Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 05:21:32Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 05:21:53Z - Slewed to IC 3476 at azel (21.8, 42.7) deg\n2025-12-01 05:51:53Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 05:51:53Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 05:52:15Z - Slewed to J1347+1217 at azel (35.8, 39.7) deg\n2025-12-01 05:54:15Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 05:54:15Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 05:54:38Z - Slewed to IC 3476 at azel (11.1, 44.7) deg\n2025-12-01 06:24:38Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 06:24:38Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 06:25:01Z - Slewed to J1347+1217 at azel (26.3, 43.3) deg\n2025-12-01 06:27:01Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 06:27:01Z - Initialising Track polcal J1331+3030 for 600.0 sec\n2025-12-01 06:27:30Z - Slewed to J1331+3030 at azel (14.1, 27.4) deg\n2025-12-01 06:37:30Z - Tracked J1331+3030 for 600 seconds\n2025-12-01 06:37:30Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 06:37:59Z - Slewed to IC 3476 at azel (356.3, 45.3) deg\n2025-12-01 07:07:59Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 07:07:59Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 07:08:23Z - Slewed to J1347+1217 at azel (11.9, 46.4) deg\n2025-12-01 07:10:23Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 07:10:23Z - Initialising Track target IC 3476 for 1800.0 sec\n2025-12-01 07:10:46Z - Slewed to IC 3476 at azel (345.1, 44.2) deg\n2025-12-01 07:40:46Z - Tracked IC 3476 for 1800 seconds\n2025-12-01 07:40:46Z - Initialising Track gaincal J1347+1217 for 120.0 sec\n2025-12-01 07:41:09Z - Slewed to J1347+1217 at azel (0.2, 47.1) deg\n2025-12-01 07:43:09Z - Tracked J1347+1217 for 120 seconds\n2025-12-01 07:43:09Z - Initialising Track fluxcal, bpcal, delaycal J1939-6342 for 600.0 sec\n2025-12-01 07:44:35Z - Slewed to J1939-6342 at azel (149.8, 28.2) deg\n2025-12-01 07:54:35Z - Tracked J1939-6342 for 600 seconds\n2025-12-01 07:54:35Z - Observation list completed - ending observation\n2025-12-01 07:54:35Z - Observation loop statistics\n2025-12-01 07:54:35Z - Single run through observation target list\n2025-12-01 07:54:35Z - Total observation time 18395.01 sec (306.58 min)\n2025-12-01 07:54:35Z - Targets observed :\n2025-12-01 07:54:35Z - IC 3476 observed for 14400.0 sec\n2025-12-01 07:54:35Z - J0408-6545 observed for 600.0 sec\n2025-12-01 07:54:35Z - J1331+3030 observed for 1200.0 sec\n2025-12-01 07:54:35Z - J1347+1217 observed for 960.0 sec\n2025-12-01 07:54:35Z - J1939-6342 observed for 600.0 sec\n2025-12-01 07:54:35Z - Observation clean up\n2025-12-01 07:54:35Z - Returning telescope to startup state\n2025-12-01 07:54:35Z - Resetting all noise diodes to \"off\"\n",
+    "manual_obs_setup": {
+        "script": null,
+        "radec": false,
+        "csv_file": null,
+        "script_parameters": [],
+        "name": null,
+        "ra": "",
+        "dec": ""
+    },
+    "observation_type": "standard",
+    "blocks": [
+        {
+            "name": "BP rising",
+            "repeat": 1,
+            "targets": [
+                {
+                    "name": "J0408-6545 | 0408-658",
+                    "ra": "04:08:20.3782",
+                    "dec": "-65:45:09.080",
+                    "tags": [
+                        "fluxcal",
+                        "bpcal",
+                        "delaycal"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 600
+                }
+            ]
+        },
+        {
+            "name": "target+gaincal1",
+            "repeat": "3",
+            "targets": [
+                {
+                    "name": "IC 3476",
+                    "ra": "12:32:39.1131",
+                    "dec": "+14:03:03.786",
+                    "tags": [
+                        "target"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 1800
+                },
+                {
+                    "name": "J1347+1217 | 1345+125",
+                    "ra": "13:47:33.3616",
+                    "dec": "+12:17:24.240",
+                    "tags": [
+                        "gaincal"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 120
+                }
+            ]
+        },
+        {
+            "name": "polcal",
+            "repeat": "1",
+            "targets": [
+                {
+                    "name": "J1331+3030 | 3C286",
+                    "ra": "13:31:08.2881",
+                    "dec": "+30:30:32.959",
+                    "tags": [
+                        "polcal"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 600
+                }
+            ]
+        },
+        {
+            "name": "target+gaincal2",
+            "repeat": "3",
+            "targets": [
+                {
+                    "name": "IC 3476",
+                    "ra": "12:32:39.1131",
+                    "dec": "+14:03:03.786",
+                    "tags": [
+                        "target"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 1800
+                },
+                {
+                    "name": "J1347+1217 | 1345+125",
+                    "ra": "13:47:33.3616",
+                    "dec": "+12:17:24.240",
+                    "tags": [
+                        "gaincal"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 120
+                }
+            ]
+        },
+        {
+            "name": "polcal[1]",
+            "repeat": "1",
+            "targets": [
+                {
+                    "name": "J1331+3030 | 3C286",
+                    "ra": "13:31:08.2881",
+                    "dec": "+30:30:32.959",
+                    "tags": [
+                        "polcal"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 600
+                }
+            ]
+        },
+        {
+            "name": "target+gaincal3",
+            "repeat": "2",
+            "targets": [
+                {
+                    "name": "IC 3476",
+                    "ra": "12:32:39.1131",
+                    "dec": "+14:03:03.786",
+                    "tags": [
+                        "target"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 1800
+                },
+                {
+                    "name": "J1347+1217 | 1345+125",
+                    "ra": "13:47:33.3616",
+                    "dec": "+12:17:24.240",
+                    "tags": [
+                        "gaincal"
+                    ],
+                    "type": "track",
+                    "band": null,
+                    "duration": 120
+                }
+            ]
+        },
+        {
+            "name": "BP setting",
+            "repeat": 1,
+            "targets": [
+                {
+                    "name": "J1939-6342 | 1934-638",
+                    "ra": "19:39:25.0264",
+                    "dec": "-63:42:45.624",
+                    "tags": [
+                        "fluxcal",
+                        "bpcal",
+                        "delaycal"
+                    ],
+                    "type": "track",
+                    "band": "s",
+                    "duration": 600
+                }
+            ]
+        }
+    ],
+    "activities": [
+        {
+            "action": "VERIFIED",
+            "comment": "start time 2025-12-01 02:48:00.000Z",
+            "username": "Letjatji Legodi",
+            "timestamp": 1763537018242.179
+        },
+        {
+            "action": "SUBMITTED",
+            "comment": "S-band obs of IC 3476 2/3. If possible conducted towards the beginning of the LST window to maximise uv coverage.",
+            "username": "Henrik Edler",
+            "timestamp": 1763486530511.6392
+        },
+        {
+            "action": "CREATED",
+            "comment": "Cloned from 20251118144653",
+            "username": "Henrik Edler",
+            "timestamp": 1763486451923.332
+        }
+    ],
+    "pi_activities": [
+        {
+            "action": "REQUEST DECLINE",
+            "comment": "Misunderstood LST settings (put latest finish time instead of latest start time)",
+            "username": "Henrik Edler",
+            "timestamp": 1763486208180.0088
+        }
+    ],
+    "flux_bandpass_calibrators": [],
+    "polarisation_calibrators": [],
+    "isYamlObservation": false
+}
