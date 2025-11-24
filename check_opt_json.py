@@ -22,6 +22,7 @@ Example:
 import argparse
 import ast
 import glob
+import itertools
 import json
 import os
 import re
@@ -116,6 +117,42 @@ def target_true(string1: str, string2: str) -> bool:
     return False
 
 
+def _canonical_name(name: str) -> str:
+    """Return a simplified, lower-case version of a target name for fuzzy matching."""
+    return re.sub(r"[\s|]+", "", str(name)).lower()
+
+
+def _ordinal_suffix(value: int) -> str:
+    """Return the ordinal suffix for an integer (1st, 2nd, 3rd, etc.)."""
+    if 10 <= value % 100 <= 20:
+        return "th"
+    suffixes = {1: "st", 2: "nd", 3: "rd"}
+    return suffixes.get(value % 10, "th")
+
+
+def _match_entry(name: str, lookup: Dict[str, dict]) -> dict:
+    """Find the best-matching entry for `name` in a pre-built lookup."""
+    key = _canonical_name(name)
+    if key in lookup:
+        return lookup[key]
+    for stored_key, entry in lookup.items():
+        if target_true(stored_key, key) or target_true(key, stored_key):
+            return entry
+    return {}
+
+
+def _build_coord_lookup(targets: Sequence[dict], tag: str) -> Dict[str, dict]:
+    """Create a name->entry lookup for targets matching a specific tag."""
+    lookup: Dict[str, dict] = {}
+    for entry in targets or []:
+        tags = entry.get("tags") or []
+        if tag in tags:
+            key = _canonical_name(entry.get("name", ""))
+            if key and key not in lookup:
+                lookup[key] = entry
+    return lookup
+
+
 def _safe_literal_list(fragment: str) -> List[str]:
     """Safely parse list literals embedded in OPT log strings."""
     try:
@@ -173,6 +210,7 @@ def _load_epoch_json(path: str) -> dict:
         "lst_start": data.get("lst_start"),
         "lst_start_end": data.get("lst_start_end"),
         "observation_type": data.get("observation_type"),
+        "desired_start_time": data.get("desired_start_time"),
     }
 
 
@@ -305,7 +343,7 @@ def CheckSources(
                 if best_match["sep_arcsec"] <= 5.0:
                     print(bblue(src_string))
                 else:
-                    print(bred(src_string))
+                    print(redtext(src_string))
             else:
                 unmatched_targets.append((fpath, epoch_target["name"]))
                 print(
@@ -370,6 +408,139 @@ def _extract_observed_duration(line: str, target: str) -> float:
     return 0.0
 
 
+def _match_name_in_line(line: str, name_keys: List[tuple]) -> str:
+    """Return the original name that matches `line`, if any."""
+    norm_line = _canonical_name(line)
+    for original, key in name_keys:
+        if key and (key in norm_line or target_true(key, norm_line) or target_true(norm_line, key)):
+            return original
+    return ""
+
+
+def _find_unbracketed_targets(
+    sim_lines: Sequence[str],
+    target_names: Sequence[str],
+    gaincal_names: Sequence[str],
+    obs_start: p.Timestamp = None,
+) -> List[dict]:
+    """
+    Identify target scan lines that are not directly bracketed by gaincal scans.
+
+    Returns a list of dicts for target scans lacking gaincal bracketing with timing info.
+    """
+    target_keys = [(name, _canonical_name(name)) for name in target_names]
+    gain_keys = [(name, _canonical_name(name)) for name in gaincal_names]
+    ref_timestamp = obs_start
+    target_order = 0
+    classified = []
+
+    for idx, line in enumerate(sim_lines):
+        ts_match = re.match(r"^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})Z", line)
+        ts_val = None
+        if ts_match:
+            try:
+                ts_val = ts_match.group(1)
+                ts_dt = p.to_datetime(ts_val, format="%Y-%m-%d %H:%M:%S")
+                if ref_timestamp is None:
+                    ref_timestamp = ts_dt
+            except Exception:
+                ts_dt = None
+        else:
+            ts_dt = None
+
+        if "Tracked" not in line:
+            continue
+        matched_target = _match_name_in_line(line, target_keys)
+        if matched_target:
+            target_order += 1
+            classified.append((idx, line, "target", ts_dt, target_order))
+            continue
+        matched_gain = _match_name_in_line(line, gain_keys)
+        if matched_gain:
+            classified.append((idx, line, "gaincal", ts_dt, None))
+
+    problems = []
+    for pos, (idx, line, kind, ts_dt, order) in enumerate(classified):
+        if kind != "target":
+            continue
+        prev_kind = classified[pos - 1][2] if pos > 0 else None
+        next_kind = classified[pos + 1][2] if pos + 1 < len(classified) else None
+        if prev_kind != "gaincal" or next_kind != "gaincal":
+            delta_sec = None
+            if ts_dt is not None and ref_timestamp is not None:
+                delta = ts_dt - ref_timestamp
+                delta_sec = delta.total_seconds()
+            problems.append(
+                {
+                    "line": line,
+                    "delta_sec": delta_sec,
+                    "order": order if order is not None else idx,
+                }
+            )
+    return problems
+
+
+def _print_closest_gaincal_separations(
+    targs: Sequence[str], gcals: Sequence[str], target_lookup: Dict[str, dict], gain_lookup: Dict[str, dict]
+) -> None:
+    """Print the closest gaincal for each target based on angular separation."""
+    if not targs or not gcals:
+        return
+    print(" - Closest gaincal to each target (by angular separation):")
+    for tgt_name in targs:
+        t_entry = _match_entry(tgt_name, target_lookup)
+        if not t_entry:
+            print(redtext(f"  - Missing coordinates for target '{tgt_name}', skipping."))
+            continue
+        best_sep = None
+        best_gain = None
+        for gc_name in gcals:
+            g_entry = _match_entry(gc_name, gain_lookup)
+            if not g_entry:
+                continue
+            sep_deg, _ = separation_radec(t_entry.get("ra"), t_entry.get("dec"), g_entry.get("ra"), g_entry.get("dec"))
+            if np.isnan(sep_deg):
+                continue
+            if (best_sep is None) or (sep_deg < best_sep):
+                best_sep = sep_deg
+                best_gain = g_entry.get("name", gc_name)
+        if best_sep is not None and best_gain:
+            print(bblue(f"  -> {t_entry.get('name', tgt_name)} -> {best_gain}: {best_sep:.4f} deg\n"))
+        else:
+            print(redtext(f"  - No usable gaincal coordinates found for '{t_entry.get('name', tgt_name)}'."))
+
+
+def _report_gaincal_bracketing(
+    sim_lines: Sequence[str],
+    targs: Sequence[str],
+    gcals: Sequence[str],
+    target_lookup: Dict[str, dict],
+    gain_lookup: Dict[str, dict],
+    obs_start: p.Timestamp = None,
+) -> None:
+    """Check that each target scan is preceded and followed by gaincal scans and print context."""
+    target_names_for_check = targs or [entry["name"] for entry in target_lookup.values()]
+    gaincal_names_for_check = gcals or [entry["name"] for entry in gain_lookup.values()]
+    if not target_names_for_check or not gaincal_names_for_check:
+        print(redtext("Insufficient target/gaincal names to check scan ordering."))
+        return
+    problematic_scans = _find_unbracketed_targets(
+        sim_lines, target_names_for_check, gaincal_names_for_check, obs_start
+    )
+    if problematic_scans:
+        print(bred("(!) Target scans not bracketed by gaincal scans:"))
+        sorted_scans = sorted(
+            problematic_scans,
+            key=lambda item: (float("inf") if item["delta_sec"] is None else item["delta_sec"], item["order"]),
+        )
+        for idx, item in enumerate(sorted_scans, start=1):
+            delta_min = item["delta_sec"] / 60.0 if item["delta_sec"] is not None else None
+            timing = f"{delta_min:.2f} min from obs start" if delta_min is not None else "time from obs start unknown"
+            print(bred(f"  {idx}{_ordinal_suffix(idx)} target scan ({timing}): {item['line']}"))
+    else:
+        print(bblue("All target scans are preceded and followed by gaincal scans."))
+
+
 def GetProjDuration(
     master_csv: str,
     epoch_files: Sequence[str],
@@ -420,6 +591,7 @@ def GetProjDuration(
     all_bp_scans: List[float] = []
     all_pol_scans: List[float] = []
     band_durations: Dict[str, float] = {}
+    overlap_candidates: List[dict] = []
 
     for epoch in epoch_data:
         gscans: List[float] = []
@@ -430,6 +602,19 @@ def GetProjDuration(
         pol_scan_times: List[float] = []
         fname = os.path.basename(epoch["file"])
         epoch_duration_hr = 0.0
+        epoch_start_dt: p.Timestamp = None
+        desired_start = epoch.get("desired_start_time")
+        if desired_start:
+            try:
+                epoch_start_dt = p.to_datetime(desired_start)
+            except Exception:
+                epoch_start_dt = None
+        target_lookup = _build_coord_lookup(epoch["targets"], "target")
+        gain_lookup = _build_coord_lookup(epoch["targets"], "gaincal")
+        separation_reported = False
+        bracketing_reported = False
+        bp_pol_header_printed = False
+        epoch_endline = ""
 
         print(f"\n{'*' * 30}\nEPOCH FILE: {fname}\n{'*' * 30}")
         instrument = epoch.get("instrument") or {}
@@ -446,7 +631,7 @@ def GetProjDuration(
             print(" Instrument info: not provided")
 
         description = epoch.get("description") or "N/A"
-        print(f" Description: {description}")
+        print(f" Epoch DESCRIPTION: \"{description}\"")
         obs_setup = epoch.get("obs_setup") or {}
         general_comments = str(obs_setup.get("general_comments", "") or "").strip() or "N/A"
         
@@ -476,6 +661,12 @@ def GetProjDuration(
 
         for line in epoch["simulation_lines"]:
             if "Setting up telescope for observation" in line:
+                ts_match = re.match(r"^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})Z", line)
+                if ts_match:
+                    try:
+                        epoch_start_dt = p.to_datetime(ts_match.group(1), format="%Y-%m-%d %H:%M:%S")
+                    except Exception:
+                        epoch_start_dt = None
                 print(
                     bblue(
                         f"\n NB: Epoch sim START: {line.replace('Setting up telescope for observation', '').split('-', 1)[-1].strip()}"
@@ -484,10 +675,32 @@ def GetProjDuration(
 
             if "Observation targets are" in line:
                 targs = _safe_literal_list(line.split("targets are", 1)[1])
-                print(f" Target names list : {targs}","\n BP & POL cal Scan sequence:")
+                print(f" Target names list : {targs}")
+                if not bracketing_reported and gcals:
+                    _report_gaincal_bracketing(
+                        epoch["simulation_lines"], targs, gcals, target_lookup, gain_lookup, epoch_start_dt
+                    )
+                    bracketing_reported = True
+                if gcals and not separation_reported:
+                    _print_closest_gaincal_separations(targs, gcals, target_lookup, gain_lookup)
+                    separation_reported = True
+                if not bp_pol_header_printed:
+                    print("\n BP & POL cal Scan sequence:")
+                    bp_pol_header_printed = True
             if "GAIN calibrators are" in line:
                 gcals = _safe_literal_list(line.split("GAIN calibrators are", 1)[1])
                 print(f" Gaincals names list : {gcals}")
+                if targs and not bracketing_reported:
+                    _report_gaincal_bracketing(
+                        epoch["simulation_lines"], targs, gcals, target_lookup, gain_lookup, epoch_start_dt
+                    )
+                    bracketing_reported = True
+                if targs and not separation_reported:
+                    _print_closest_gaincal_separations(targs, gcals, target_lookup, gain_lookup)
+                    separation_reported = True
+                if not bp_pol_header_printed:
+                    print("\n BP & POL cal Scan sequence:")
+                    bp_pol_header_printed = True
             if "BP calibrators are" in line:
                 bpcals = _safe_literal_list(line.split("BP calibrators are", 1)[1])
                 print(f" BPcals names list : {bpcals}")
@@ -496,11 +709,12 @@ def GetProjDuration(
                 print(f" POLcals names list : {pcals}")
             
             if "Resetting all noise diodes to" in line:
-                print(bblue(f" NB: Epoch sim END: {line.replace('Resetting all noise diodes to', '').split('-', 1)[-1].split('\"off\"')[0]}"))
+                epoch_endline = (bblue(f"\nNB: Epoch sim END: {line.replace('Resetting all noise diodes to', '').split('-', 1)[-1].split('\"off\"')[0]}"))
             for gc in gcals:
                 dur = _extract_tracked_duration(line, gc)
                 if dur:
                     gscans.append(dur)
+            
             for pc in pcals:
                 dur = _extract_tracked_duration(line, pc)
                 if dur:
@@ -518,7 +732,7 @@ def GetProjDuration(
                     tt = _extract_observed_duration(line, tgt)
                     if tt:
                         print(
-                            redtext(
+                            bblue(
                                 f"\tTot. time on TARGET for this EPOCH {tgt}: {tt/60.:.1f} min ({tt/3600.:.3f} hrs)"
                             )
                         )
@@ -538,7 +752,7 @@ def GetProjDuration(
                 Tmm += mm
                 Tth += np.nansum(np.array(lsc)) / 3600.0
                 epoch_duration_hr = mm / 60.0
-                # print(f" Simulation file name: {fname}")
+                print(f"\nDurations:")
                 print(bblue(f"\tEPOCH DURATION         : {mm/60.:.4f} hrs"))
                 print(bblue(f"\tNumber of BPcal scans  : {len(bpscans):d} = {np.nansum(bpscans)/60.:.1f} min"))
                 print(bblue(f"\tNumber of gaincal scans: {len(gscans):d} = {np.nansum(gscans)/60.:.1f} min"))
@@ -564,16 +778,66 @@ def GetProjDuration(
         else:
             print(bblue("Less than two POLcal scans found, no time differences to report."))
 
+        print(f"{epoch_endline} ---- ||\n")
         all_target_scans.extend(lsc)
         all_gain_scans.extend(gscans)
         all_bp_scans.extend(bpscans)
         all_pol_scans.extend(pscans)
         band_durations[band_label] = band_durations.get(band_label, 0.0) + epoch_duration_hr
 
+        # Collect info for overlapping observations with the same target(s).
+        if epoch_start_dt is not None and epoch_duration_hr and targs:
+            desc_lower = (description or "").lower()
+            overlap_candidates.append(
+                {
+                    "file": fname,
+                    "targets": set(targs),
+                    "start": epoch_start_dt,
+                    "end": epoch_start_dt + p.Timedelta(hours=epoch_duration_hr),
+                    "description": description,
+                    "desc_lower": desc_lower,
+                    "band": band_label,
+                }
+            )
+
     lsc_arr = np.array(all_target_scans)
     gsc_arr = np.array(all_gain_scans)
     bsc_arr = np.array(all_bp_scans)
     psc_arr = np.array(all_pol_scans)
+
+    if overlap_candidates:
+        print(bblue("Overlap between epochs with matching targets (rising/setting or same band):"))
+        found_overlap = False
+        for left, right in itertools.combinations(overlap_candidates, 2):
+            if left["targets"] != right["targets"]:
+                continue
+            desc_cond = (
+                ("rising" in left["desc_lower"] or "setting" in left["desc_lower"])
+                and ("rising" in right["desc_lower"] or "setting" in right["desc_lower"])
+            )
+            band_cond = (
+                bool(left["band"])
+                and bool(right["band"])
+                and left["band"].lower() == right["band"].lower()
+            )
+            if not (desc_cond or band_cond):
+                continue
+            latest_start = max(left["start"], right["start"])
+            earliest_end = min(left["end"], right["end"])
+            overlap = (earliest_end - latest_start).total_seconds() / 3600.0
+            overlap = max(0.0, overlap)
+            reason_parts = []
+            if desc_cond:
+                reason_parts.append("rising/setting")
+            if band_cond:
+                reason_parts.append(f"same band ({left['band']})")
+            reason = " and ".join(reason_parts) if reason_parts else "matching targets"
+            found_overlap = True
+            print(f"  {left['file']} (\"{left['description']}\") and {right['file']} (\"{right['description']}\") ",
+                    bblue(f"overlap by {overlap:.3f} hrs [{reason}]") )
+                
+        if not found_overlap:
+            print(bblue("  No qualifying rising/setting or same-band pairs with matching targets found."))
 
     print(bred(f"\n{'*' * 50}"))
     
