@@ -247,6 +247,29 @@ def _lst_duration_hours(lst_start: str, lst_end: str) -> float:
     return diff / 60.0
 
 
+def _dec_to_degrees(value) -> float:
+    """Convert a declination string or number to decimal degrees; return None on failure."""
+    if value is None:
+        return None
+    try:
+        return float(value)
+    except Exception:
+        pass
+    text = str(value).strip()
+    if not text:
+        return None
+    text = text.replace("d", ":").replace("m", ":").replace("s", ":")
+    parts = text.split(":")
+    try:
+        deg = float(parts[0])
+        sign = -1.0 if str(parts[0]).strip().startswith("-") else 1.0
+        minutes = float(parts[1]) if len(parts) > 1 else 0.0
+        seconds = float(parts[2]) if len(parts) > 2 else 0.0
+        return sign * (abs(deg) + minutes / 60.0 + seconds / 3600.0)
+    except Exception:
+        return None
+
+
 def _append_note(existing: str, addition: str) -> str:
     """Append `addition` to a semi-colon separated note string without duplication."""
     parts = [part.strip() for part in existing.split(";") if part.strip()] if existing else []
@@ -538,7 +561,7 @@ def _report_gaincal_bracketing(
             timing = f"{delta_min:.2f} min from obs start" if delta_min is not None else "time from obs start unknown"
             print(bred(f"  {idx}{_ordinal_suffix(idx)} target scan ({timing}): {item['line']}"))
     else:
-        print(bblue("All target scans are preceded and followed by gaincal scans."))
+        print(bblue(" All target scans are preceded and followed by gaincal scans."))
 
 
 def GetProjDuration(
@@ -591,7 +614,10 @@ def GetProjDuration(
     all_bp_scans: List[float] = []
     all_pol_scans: List[float] = []
     band_durations: Dict[str, float] = {}
+    band_epoch_counts: Dict[str, int] = {}
     overlap_candidates: List[dict] = []
+    target_declinations: Dict[str, List[float]] = {}
+    unique_science_targets = set()
 
     for epoch in epoch_data:
         gscans: List[float] = []
@@ -619,6 +645,7 @@ def GetProjDuration(
         print(f"\n{'*' * 30}\nEPOCH FILE: {fname}\n{'*' * 30}")
         instrument = epoch.get("instrument") or {}
         band_label = str(instrument.get("band") or "unknown").strip() or "unknown"
+        band_epoch_counts[band_label] = band_epoch_counts.get(band_label, 0) + 1
 
         if instrument:
             print(" Instrument info:")
@@ -670,7 +697,7 @@ def GetProjDuration(
                 print(
                     bblue(
                         f"\n NB: Epoch sim START: {line.replace('Setting up telescope for observation', '').split('-', 1)[-1].strip()}"
-                    )
+                    ),"  ---- ||"
                 )
 
             if "Observation targets are" in line:
@@ -699,7 +726,7 @@ def GetProjDuration(
                     _print_closest_gaincal_separations(targs, gcals, target_lookup, gain_lookup)
                     separation_reported = True
                 if not bp_pol_header_printed:
-                    print("\n BP & POL cal Scan sequence:")
+                    # print("\n BP & POL cal Scan sequence:")
                     bp_pol_header_printed = True
             if "BP calibrators are" in line:
                 bpcals = _safe_literal_list(line.split("BP calibrators are", 1)[1])
@@ -776,7 +803,7 @@ def GetProjDuration(
                 diff_hr = diff_sec / 3600.0
                 print(f"\t\tPOLcal scan {i}: {diff_min:.2f} min ({diff_hr:.3f} hr) since previous POLcal scan")
         else:
-            print(bblue("Less than two POLcal scans found, no time differences to report."))
+            print(bblue("\tLess than two POLcal scans found, no time differences to report."))
 
         print(f"{epoch_endline} ---- ||\n")
         all_target_scans.extend(lsc)
@@ -784,6 +811,14 @@ def GetProjDuration(
         all_bp_scans.extend(bpscans)
         all_pol_scans.extend(pscans)
         band_durations[band_label] = band_durations.get(band_label, 0.0) + epoch_duration_hr
+        for entry in epoch.get("targets", []):
+            if "target" in entry.get("tags", []):
+                name = str(entry.get("name", "")).strip()
+                if name:
+                    unique_science_targets.add(name)
+                    dec_val = _dec_to_degrees(entry.get("dec"))
+                    if dec_val is not None:
+                        target_declinations.setdefault(name, []).append(dec_val)
 
         # Collect info for overlapping observations with the same target(s).
         if epoch_start_dt is not None and epoch_duration_hr and targs:
@@ -830,7 +865,7 @@ def GetProjDuration(
             if desc_cond:
                 reason_parts.append("rising/setting")
             if band_cond:
-                reason_parts.append(f"same band ({left['band']})")
+                reason_parts.append(f"same band ({left['band'].capitalize()})")
             reason = " and ".join(reason_parts) if reason_parts else "matching targets"
             found_overlap = True
             print(f"  {left['file']} (\"{left['description']}\") and {right['file']} (\"{right['description']}\") ",
@@ -880,8 +915,9 @@ def GetProjDuration(
             print(bblue(f"  Band '{band.capitalize()}': {hours:.2f} hrs"))
 
     epoch_target_map = {epoch["file"]: epoch["targets"] for epoch in epoch_data}
+    source_check_result = {}
     try:
-        CheckSources(
+        source_check_result = CheckSources(
             csv0=master_csv,
             epoch_targets=epoch_target_map,
             ntag0=name_column,
@@ -889,13 +925,67 @@ def GetProjDuration(
             dectag0=dec_column,
         )
     except KeyError:
-        CheckSources(
+        source_check_result = CheckSources(
             csv0=master_csv,
             epoch_targets=epoch_target_map,
             ntag0="Name",
             ratag0="RA",
             dectag0="DEC",
         )
+
+    if len(epoch_files) > 1:
+        total_project_hours = Tmm / 60.0
+        mean_target_time = Tth / float(len(epoch_files)) if epoch_files else 0.0
+        unmatched_count = len(source_check_result.get("unmatched_epoch_targets", []))
+        all_decs = [deg for values in target_declinations.values() for deg in values]
+        near_limit_targets = sorted(
+            name for name, decs in target_declinations.items() if any(abs(dec - 40.0) <= 10.0 for dec in decs)
+        )
+        north_of_limit_targets = sorted(
+            name for name, decs in target_declinations.items() if any(dec > 42.0 for dec in decs)
+        )
+
+        print()
+        print("=" * 60)
+        print("PROJECT SUMMARY")
+        print("=" * 60)
+        print(f"Epoch JSON files processed: {len(epoch_files)}")
+        print(f"Unique science targets    : {len(unique_science_targets)}")
+        print("\nTime statistics (hours):")
+        print(f" - Total on-target time         : {Tth:.3f}")
+        print(f" - Mean on-target time per epoch: {mean_target_time:.3f}")
+        print(f" - Total project time           : {total_project_hours:.3f}")
+        print(f" - Project time minus 25% ovhds : {(total_project_hours/1.25):.3f}")
+        if band_durations:
+            print("\nBand breakdown:")
+            for band in sorted(band_durations.keys()):
+                hours = band_durations[band]
+                count = band_epoch_counts.get(band, 0)
+                print(f" - Band '{band}': {hours:.3f} hrs across {count} epoch(s)")
+        if all_decs:
+            print("\nDeclination coverage (science targets):")
+            print(f" - Range: {min(all_decs):.2f} deg to {max(all_decs):.2f} deg")
+            if near_limit_targets:
+                print(
+                    f" - Targets within 10 deg of +40: {len(near_limit_targets)} -> "
+                    f"{', '.join(near_limit_targets)}"
+                )
+            else:
+                print(" - Targets within 10 deg of +40: 0")
+            if north_of_limit_targets:
+                print(
+                    f" - Targets north of +42 (unobservable): {len(north_of_limit_targets)} -> "
+                    f"{', '.join(north_of_limit_targets)}"
+                )
+            else:
+                print(" - Targets north of +42 (unobservable): 0")
+        if unmatched_count:
+            print(
+                f"\nEpoch targets missing from master catalogue: {unmatched_count} "
+                "(see detailed listing above)."
+            )
+        else:
+            print("\nEpoch targets missing from master catalogue: 0")
 
     # print(f"\n\n{'*' * 30}\n")
     # print("MASTER LIST contents:")

@@ -1,0 +1,946 @@
+
+
+##############################
+PROJECT: SCI-20251103-ST-01
+##############################
+
+
+******************************
+EPOCH FILE: Mrk36-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "Mrk36L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 09:15 -> 9:40 (0.42 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-26 03:42:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J1331+3030']
+ Gaincals names list : ['J1120+1420']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['Mrk36']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> Mrk36 -> J1120+1420 | 1117+146: 15.2187 deg
+[0m[0m
+ - BPcal scan : 2025-11-26 03:47:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 05:25:08Z - Tracked J1331+3030 for 300 seconds
+ - BPcal scan : 2025-11-26 05:34:14Z - Tracked J0408-6545 for 300 seconds
+ - BPcal scan : 2025-11-26 06:24:32Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 06:31:11Z - Tracked J1331+3030 for 300 seconds
+ - POLcal scan: 2025-11-26 08:09:58Z - Tracked J1331+3030 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4663 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH Mrk36: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 101.00 min (1.683 hr) since previous BPcal scan
+		BPcal scan 2: 47.00 min (0.783 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 59.00 min (0.983 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-26 08:09:58Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: Mrk36-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "Mrk36S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 09:30 -> 9:35 (0.08 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-26 03:52:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J1331+3030']
+ Gaincals names list : ['J1126+3345']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['Mrk36']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> Mrk36 -> J1126+3345 | T1126+33: 6.4943 deg
+[0m[0m
+ - BPcal scan : 2025-11-26 03:57:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 05:39:28Z - Tracked J1331+3030 for 600 seconds
+ - BPcal scan : 2025-11-26 05:48:20Z - Tracked J0408-6545 for 300 seconds
+ - BPcal scan : 2025-11-26 06:38:22Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 06:45:00Z - Tracked J1331+3030 for 300 seconds
+ - POLcal scan: 2025-11-26 08:22:45Z - Tracked J1331+3030 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.5127 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 20.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH Mrk36: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 106.00 min (1.767 hr) since previous BPcal scan
+		BPcal scan 2: 47.00 min (0.783 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 64.00 min (1.067 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-26 08:22:45Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC1705-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC1705L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 00:50 -> 5:00 (4.17 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 12-02 22:46:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0440-4333']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC1705']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC1705 -> J0440-4333 | 0438-436: 10.0740 deg
+[0m[0m
+ - BPcal scan : 2025-12-02 22:51:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-02 23:46:05Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-03 01:20:05Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-03 01:26:13Z - Tracked J0521+1638 for 300 seconds
+ - POLcal scan: 2025-12-03 03:04:58Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-03 03:10:55Z - Tracked J0408-6545 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4153 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC1705: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 106.00 min (1.767 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 12-03 03:10:55Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC1705-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC1705S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 00:50 -> 5:00 (4.17 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-27 19:01:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0440-4333']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC1705']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC1705 -> J0440-4333 | 0438-436: 10.0740 deg
+[0m[0m
+ - BPcal scan : 2025-11-27 19:06:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-27 20:00:23Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-27 21:33:51Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-27 21:40:11Z - Tracked J0521+1638 for 300 seconds
+ - POLcal scan: 2025-11-27 23:20:10Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-27 23:26:46Z - Tracked J0408-6545 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4297 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC1705: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 106.00 min (1.767 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-27 23:26:46Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC1796-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC1796L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 01:20 -> 5:00 (3.67 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 12-03 19:02:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0420-6223']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC1796']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC1796 -> J0420-6223 | 0420-625: 5.0909 deg
+[0m[0m
+ - BPcal scan : 2025-12-03 19:07:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-03 20:01:13Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-03 21:34:22Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-03 21:40:47Z - Tracked J0521+1638 for 300 seconds
+ - POLcal scan: 2025-12-03 23:20:44Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-03 23:27:14Z - Tracked J0408-6545 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4207 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC1796: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 106.00 min (1.767 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 12-03 23:27:14Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC1796-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC1796S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 01:20 -> 5:00 (3.67 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 12-03 19:02:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0420-6223']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC1796']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC1796 -> J0420-6223 | 0420-625: 5.0909 deg
+[0m[0m
+ - BPcal scan : 2025-12-03 19:07:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-03 20:01:13Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-03 21:34:22Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-03 21:40:47Z - Tracked J0521+1638 for 300 seconds
+ - POLcal scan: 2025-12-03 23:20:44Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-03 23:27:14Z - Tracked J0408-6545 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4207 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC1796: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 106.00 min (1.767 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 12-03 23:27:14Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC2082-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC2082L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 01:10 -> 4:50 (3.67 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 12-05 22:24:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0420-6223']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC2082']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC2082 -> J0420-6223 | 0420-625: 9.2307 deg
+[0m[0m
+ - BPcal scan : 2025-12-05 22:29:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-05 23:23:51Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-06 00:57:36Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-12-06 01:03:45Z - Tracked J0521+1638 for 300 seconds
+ - POLcal scan: 2025-12-06 02:42:45Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-12-06 02:48:42Z - Tracked J0408-6545 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4120 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC2082: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 106.00 min (1.767 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 12-06 02:48:42Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC2082-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC2082S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 01:10 -> 4:50 (3.67 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-29 22:47:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0420-6223']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC2082']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC2082 -> J0420-6223 | 0420-625: 9.2307 deg
+[0m[0m
+ - BPcal scan : 2025-11-29 22:52:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-29 23:46:51Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-30 01:20:36Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-30 01:26:46Z - Tracked J0521+1638 for 300 seconds
+ - POLcal scan: 2025-11-30 03:05:46Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-30 03:11:43Z - Tracked J0408-6545 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4122 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC2082: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 106.00 min (1.767 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-30 03:11:43Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC3239-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC3239L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 06:20 -> 6:30 (0.17 hrs)
+ Observation type: standard
+[1m[94mLess than two BPcal scans found, no time differences to report.[0m[0m
+[1m[94m	Less than two POLcal scans found, no time differences to report.[0m[0m
+ ---- ||
+
+
+******************************
+EPOCH FILE: NGC3239-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC3239S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 06:20 -> 06:30 (0.17 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-26 00:28:00Z -[0m[0m   ---- ||
+
+Durations:
+[1m[94m	EPOCH DURATION         : 0.0000 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 0 = 0.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 0 = 0.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 0 = 0.0 min[0m[0m
+[1m[94m	Number of target scans : 0 = 0.0 min[0m[0m
+[1m[94mLess than two BPcal scans found, no time differences to report.[0m[0m
+[1m[94m	Less than two POLcal scans found, no time differences to report.[0m[0m
+[1m[94m
+NB: Epoch sim END: 11-26 00:28:00Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC3274-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC3274L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 09:20 -> 9:35 (0.25 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-26 03:47:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J1331+3030']
+ Gaincals names list : ['J1120+1420']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC3274']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC3274 -> J1120+1420 | 1117+146: 17.4058 deg
+[0m[0m
+ - BPcal scan : 2025-11-26 03:52:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 05:30:05Z - Tracked J1331+3030 for 300 seconds
+ - BPcal scan : 2025-11-26 05:39:10Z - Tracked J0408-6545 for 300 seconds
+ - BPcal scan : 2025-11-26 06:29:22Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 06:36:01Z - Tracked J1331+3030 for 300 seconds
+ - POLcal scan: 2025-11-26 07:33:58Z - Tracked J1331+3030 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 3.7830 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 4 = 170.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC3274: 170.0 min (2.833 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 101.00 min (1.683 hr) since previous BPcal scan
+		BPcal scan 2: 47.00 min (0.783 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 59.00 min (0.983 hr) since previous POLcal scan
+		POLcal scan 2: 56.00 min (0.933 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-26 07:33:58Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC3274-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC3274S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 09:00 -> 9:20 (0.33 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-26 03:32:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J1331+3030']
+ Gaincals names list : ['J0952+2828']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC3274']
+[1m[31m(!) Target scans not bracketed by gaincal scans:[0m[0m
+[1m[31m  1st target scan (time from obs start unknown): 2025-11-26 07:52:30Z - Tracked NGC3274 for 2400 seconds[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC3274 -> J0952+2828 | T0952+2828: 8.8984 deg
+[0m[0m
+ - BPcal scan : 2025-11-26 03:37:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 05:14:35Z - Tracked J1331+3030 for 300 seconds
+ - BPcal scan : 2025-11-26 05:23:29Z - Tracked J0408-6545 for 300 seconds
+ - BPcal scan : 2025-11-26 06:15:32Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 06:22:12Z - Tracked J1331+3030 for 300 seconds
+ - POLcal scan: 2025-11-26 07:58:01Z - Tracked J1331+3030 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.4337 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC3274: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 101.00 min (1.683 hr) since previous BPcal scan
+		BPcal scan 2: 49.00 min (0.817 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 61.00 min (1.017 hr) since previous POLcal scan
+		POLcal scan 2: 94.00 min (1.567 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-26 07:58:01Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC3487-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC3487L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 09:00 -> 09:30 (0.50 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-26 04:12:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J1331+3030']
+ Gaincals names list : ['J1120+1420']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC3489']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC3489 -> J1120+1420 | 1117+146: 4.9066 deg
+[0m[0m
+ - BPcal scan : 2025-11-26 04:17:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 05:54:42Z - Tracked J1331+3030 for 300 seconds
+ - BPcal scan : 2025-11-26 06:03:40Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 06:52:50Z - Tracked J1331+3030 for 300 seconds
+ - POLcal scan: 2025-11-26 08:30:42Z - Tracked J1331+3030 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.3118 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 2 = 10.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC3489: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 101.00 min (1.683 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 54.00 min (0.900 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-26 08:30:42Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC3487-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC3487S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 09:00 -> 09:30 (0.50 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-26 03:42:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J1331+3030']
+ Gaincals names list : ['J1058+0133']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC3489']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC3489 -> J1058+0133 | 1055+018: 12.3430 deg
+[0m[0m
+ - BPcal scan : 2025-11-26 03:47:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 05:30:15Z - Tracked J1331+3030 for 600 seconds
+ - BPcal scan : 2025-11-26 05:39:27Z - Tracked J0408-6545 for 300 seconds
+ - BPcal scan : 2025-11-26 06:29:31Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-26 06:36:10Z - Tracked J1331+3030 for 300 seconds
+ - POLcal scan: 2025-11-26 08:14:49Z - Tracked J1331+3030 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.5470 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 20.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC3489: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 106.00 min (1.767 hr) since previous BPcal scan
+		BPcal scan 2: 47.00 min (0.783 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 64.00 min (1.067 hr) since previous POLcal scan
+		POLcal scan 2: 96.00 min (1.600 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-26 08:14:49Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC625-L-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c856M32k
+   integration_time: 8.00
+               band: l
+        center_freq: 
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC625L"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 00:30 -> 3:45 (3.25 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-28 21:47:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0155-4048']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC625']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC625 -> J0155-4048 | 0153-410: 3.9177 deg
+[0m[0m
+ - BPcal scan : 2025-11-28 21:52:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-28 22:46:54Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-29 00:20:13Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-29 00:26:34Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-29 02:04:40Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-29 02:10:44Z - Tracked J0521+1638 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.3958 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC625: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 101.00 min (1.683 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 101.00 min (1.683 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-29 02:10:44Z -  [0m[0m ---- ||
+
+
+******************************
+EPOCH FILE: NGC625-S-SCI-20251103-ST-01.json
+******************************
+ Instrument info:
+            product: c875M4k
+   integration_time: 8.00
+               band: s
+        center_freq: 2406.25
+     pool_resources: cbf, sdp, bluse, fbfuse, tuse
+   config_auth_host: MeerTRAP
+ Epoch DESCRIPTION: "NGC625S"
+ Obs setup comments: N/A
+  - mandatory_night_obs : False
+  - avoid_sunrise_sunset: False
+  - baseline_requirements: N/A
+  - minimum_antennas    : 58
+ LST span: 00:30 -> 3:45 (3.25 hrs)
+ Observation type: standard
+[1m[94m
+ NB: Epoch sim START: 11-28 21:47:00Z -[0m[0m   ---- ||
+ POLcals names list : ['J0521+1638']
+ Gaincals names list : ['J0155-4048']
+ BPcals names list : ['J0408-6545']
+ Target names list : ['NGC625']
+[1m[94m All target scans are preceded and followed by gaincal scans.[0m[0m
+ - Closest gaincal to each target (by angular separation):
+[1m[94m  -> NGC625 -> J0155-4048 | 0153-410: 3.9177 deg
+[0m[0m
+ - BPcal scan : 2025-11-28 21:52:48Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-28 22:46:54Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-29 00:20:13Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-29 00:26:34Z - Tracked J0521+1638 for 300 seconds
+ - BPcal scan : 2025-11-29 02:04:40Z - Tracked J0408-6545 for 300 seconds
+ - POLcal scan: 2025-11-29 02:10:44Z - Tracked J0521+1638 for 300 seconds
+
+Durations:
+[1m[94m	EPOCH DURATION         : 4.3958 hrs[0m[0m
+[1m[94m	Number of BPcal scans  : 3 = 15.0 min[0m[0m
+[1m[94m	Number of gaincal scans: 7 = 14.0 min[0m[0m
+[1m[94m	Number of POLcal scans : 3 = 15.0 min[0m[0m
+[1m[94m	Number of target scans : 5 = 210.0 min[0m[0m
+[1m[94m	Tot. time on TARGET for this EPOCH NGC625: 210.0 min (3.500 hrs)[0m[0m
+[1m[94m	Time between BPcal scans:[0m[0m
+		BPcal scan 1: 143.00 min (2.383 hr) since previous BPcal scan
+		BPcal scan 2: 101.00 min (1.683 hr) since previous BPcal scan
+[1m[94m	Time between POLcal scans:[0m[0m
+		POLcal scan 1: 96.00 min (1.600 hr) since previous POLcal scan
+		POLcal scan 2: 101.00 min (1.683 hr) since previous POLcal scan
+[1m[94m
+NB: Epoch sim END: 11-29 02:10:44Z -  [0m[0m ---- ||
+
+[1m[94mOverlap between epochs with matching targets (rising/setting or same band):[0m[0m
+[1m[94m  No qualifying rising/setting or same-band pairs with matching targets found.[0m[0m
+[1m[31m
+**************************************************[0m[0m
+[1m[94mTarget scan length(min, max, stdev) = 40.0,45.0,2.5 min[0m[0m
+[1m[94mGaincal scan length(min, max, stdev)= 2.0,2.0,0.0 min[0m[0m
+[1m[94mBP cal scan length(min, max, stdev) = 5.0,5.0,0.0 min[0m[0m
+[1m[94mPOL cal scan length(min, max, stdev)= 5.0,10.0,1.1 min[0m[0m
+[1m[31m
+**** TOTAL time on target for all epochs: 48.33333333333333 hrs[0m[0m
+[1m[31m**** TOTAL PROJECT TIME                 : 61.4 Hrs [0m[0m
+[1m[31m**** TOTAL PROJECT TIME - 25% overheads : 49.1 Hrs [0m[0m
+[1m[31m**************************************************
+[0m[0m
+[1m[94mTime per instrument band:[0m[0m
+[1m[94m  Band 'L': 30.21 hrs[0m[0m
+[1m[94m  Band 'S': 31.15 hrs[0m[0m
+
+ ******
+ TARGET NAMES & COORDINATES checks
+ ******
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'Mrk36-L-SCI-20251103-ST-01.json'
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'Mrk36-S-SCI-20251103-ST-01.json'
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+[1m[94mMrk36 RA: 11:04:58.295 DEC: +29:08:22.60 | Mrk36 RA: 11:04:58.2956 DEC: +29:08:22.601, sep: 0.007924" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC1705-L-SCI-20251103-ST-01.json'
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC1705-S-SCI-20251103-ST-01.json'
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC1705 RA: 04:54:13.517 DEC: -53:21:39.49 | NGC1705 RA: 04:54:13.5170 DEC: -53:21:39.493, sep: 0.003000" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC1796-L-SCI-20251103-ST-01.json'
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC1796-S-SCI-20251103-ST-01.json'
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+[1m[94mNGC1796 RA: 05:02:42.629 DEC: -61:08:23.91 | NGC1796 RA: 05:02:42.6293 DEC: -61:08:23.919, sep: 0.009258" (0.0002 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC2082-L-SCI-20251103-ST-01.json'
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC2082-S-SCI-20251103-ST-01.json'
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+[1m[94mNGC2082 RA: 05:41:51.314 DEC: -64:18:04.37 | NGC2082 RA: 05:41:51.3141 DEC: -64:18:04.370, sep: 0.000650" (0.0000 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC3239-L-SCI-20251103-ST-01.json'
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC3239-S-SCI-20251103-ST-01.json'
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3239 RA: 10:25:04.914 DEC: +17:09:49.06 | NGC3239 RA: 10:25:04.9140 DEC: +17:09:49.068, sep: 0.008000" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC3274-L-SCI-20251103-ST-01.json'
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC3274-S-SCI-20251103-ST-01.json'
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+[1m[94mNGC3274 RA: 10:32:17.202 DEC: +27:40:07.67 | NGC3274 RA: 10:32:17.2021 DEC: +27:40:07.678, sep: 0.008110" (0.0001 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC3487-L-SCI-20251103-ST-01.json'
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC3487-S-SCI-20251103-ST-01.json'
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+[1m[94mNGC3489 RA: 11:00:18.550 DEC: +13:54:04.28 | NGC3489 RA: 11:00:18.5506 DEC: +13:54:04.284, sep: 0.009609" (0.0002 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC625-L-SCI-20251103-ST-01.json'
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+
+'targets_SCI-20251103-ST-01.csv'  v.s. 'NGC625-S-SCI-20251103-ST-01.json'
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94mNGC625 RA: 01:35:04.630 DEC: -41:26:10.30 | NGC625 RA: 01:35:04.6300 DEC: -41:26:10.300, sep: 0.000000" (0.0000 arcmin)[0m[0m
+[1m[94m
+All epoch science targets are present in the proposal catalogue.[0m[0m
+
+
+++++++++++++++++++++++++++++++
+Minimum separations between matched sources and their best epoch counterpart:
+[1m[94mMrk36: 0.007924" (0.0001 arcmin) | Notes: found in Mrk36-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mMrk36: 0.007924" (0.0001 arcmin) | Notes: found in Mrk36-S-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC1705: 0.003000" (0.0001 arcmin) | Notes: found in NGC1705-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC1705: 0.003000" (0.0001 arcmin) | Notes: found in NGC1705-S-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC1796: 0.009258" (0.0002 arcmin) | Notes: found in NGC1796-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC1796: 0.009258" (0.0002 arcmin) | Notes: found in NGC1796-S-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC2082: 0.000650" (0.0000 arcmin) | Notes: found in NGC2082-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC2082: 0.000650" (0.0000 arcmin) | Notes: found in NGC2082-S-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC3239: 0.008000" (0.0001 arcmin) | Notes: found in NGC3239-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC3239: 0.008000" (0.0001 arcmin) | Notes: found in NGC3239-S-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC3274: 0.008110" (0.0001 arcmin) | Notes: found in NGC3274-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC3274: 0.008110" (0.0001 arcmin) | Notes: found in NGC3274-S-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC3489: 0.009609" (0.0002 arcmin) | Notes: found in NGC3487-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC3489: 0.009609" (0.0002 arcmin) | Notes: found in NGC3487-S-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC625: 0.000000" (0.0000 arcmin) | Notes: found in NGC625-L-SCI-20251103-ST-01.json;[0m[0m
+[1m[94mNGC625: 0.000000" (0.0000 arcmin) | Notes: found in NGC625-S-SCI-20251103-ST-01.json;[0m[0m
+++++++++++++++++++++++++++++++
+
