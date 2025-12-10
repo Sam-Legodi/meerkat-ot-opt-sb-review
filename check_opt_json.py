@@ -164,6 +164,16 @@ def _normalise_tags(raw_tags) -> List[str]:
     return [str(tag).strip().lower() for tag in tags if str(tag).strip()]
 
 
+def _is_truthy(value) -> bool:
+    """Return True for common truthy representations."""
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    text = str(value).strip().lower()
+    return text in {"true", "yes", "1", "y", "t"}
+
+
 def _build_category_lookup(targets: Sequence[dict]) -> Dict[str, dict]:
     """Return a mapping of canonical target name -> {'name', 'category'}."""
     lookup: Dict[str, dict] = {}
@@ -343,7 +353,7 @@ def CheckSources(
         )
 
     min_sep_dict = {record["name"]: float("inf") for record in master_records}
-    unmatched_targets: List[tuple] = []
+    unmatched_targets: List[dict] = []
     matched_pairs: List[dict] = []
     best_match_per_master: Dict[str, dict] = {}
 
@@ -413,7 +423,14 @@ def CheckSources(
                     }
                 )
             else:
-                unmatched_targets.append((fpath, epoch_target["name"]))
+                unmatched_targets.append(
+                    {
+                        "file": fpath,
+                        "name": epoch_target["name"],
+                        "ra": epoch_target.get("ra", ""),
+                        "dec": epoch_target.get("dec", ""),
+                    }
+                )
                 print(
                     bred(
                         f"Science target '{epoch_target['name']}' "
@@ -423,8 +440,13 @@ def CheckSources(
 
     if unmatched_targets:
         print("\nTargets present in epoch files but missing from the proposal catalogue:")
-        for fpath, tgt in unmatched_targets:
-            print(bred(f" - {tgt} (epoch file {os.path.basename(fpath)})"))
+        for entry in unmatched_targets:
+            print(
+                bred(
+                    f" - {entry['name']} RA: {entry.get('ra','')} DEC: {entry.get('dec','')} "
+                    f"(epoch file {os.path.basename(entry['file'])})"
+                )
+            )
     else:
         print(bblue("\nAll epoch science targets are present in the proposal catalogue."))
 
@@ -452,11 +474,19 @@ def CheckSources(
             note_entries = [""]
 
         min_sep = min_sep_dict[name]
+        match_info = best_match_per_master.get(name)
         if np.isfinite(min_sep):
-            base_msg = f"{name}: {min_sep:.6f}\" ({min_sep/60.:.4f} arcmin)"
+            if match_info:
+                base_msg = (
+                    f"{name} [RA {record['ra']}, Dec {record['dec']}] -> "
+                    f"{match_info['epoch_name']} [RA {match_info['ra_epoch']}, Dec {match_info['dec_epoch']}] : "
+                    f"{min_sep:.6f}\" ({min_sep/60.:.4f} arcmin)"
+                )
+            else:
+                base_msg = f"{name} [RA {record['ra']}, Dec {record['dec']}] : {min_sep:.6f}\" ({min_sep/60.:.4f} arcmin)"
             printer = bblue
         else:
-            base_msg = f"{name}: not scheduled in supplied epochs"
+            base_msg = f"{name} [RA {record['ra']}, Dec {record['dec']}] : not scheduled in supplied epochs"
             printer = bred
 
         for entry in note_entries:
@@ -472,7 +502,7 @@ def CheckSources(
         crossmatch_extremes = {"min": min_pair, "max": max_pair}
 
     return {
-        "unmatched_epoch_targets": [name for _, name in unmatched_targets],
+        "unmatched_epoch_targets": [entry["name"] for entry in unmatched_targets],
         "updated_catalogue": csv0,
         "crossmatch_extremes": crossmatch_extremes,
     }
@@ -617,7 +647,7 @@ def _print_closest_gaincal_separations(
                 best_sep = sep_deg
                 best_gain = g_entry.get("name", gc_name)
         if best_sep is not None and best_gain:
-            print(bblue(f"  -> {t_entry.get('name', tgt_name)} -> {best_gain}: {best_sep:.4f} deg\n"))
+            print(bblue(f"  -> {t_entry.get('name', tgt_name)} -> {best_gain}: {best_sep:.4f} deg"))
         else:
             print(redtext(f"  - No usable gaincal coordinates found for '{t_entry.get('name', tgt_name)}'."))
 
@@ -718,6 +748,9 @@ def GetProjDuration(
     gaincal_duration_fail_epochs = 0
     gaincal_bracket_fail_epochs = 0
     first_bpcal_fail_epochs = 0
+    mandatory_night_true_epochs = 0
+    avoid_sunrise_true_epochs = 0
+    night_constraint_epochs = 0
 
     for epoch in epoch_data:
         gscans: List[float] = []
@@ -766,7 +799,15 @@ def GetProjDuration(
         print(f" Epoch DESCRIPTION: \"{description}\"")
         obs_setup = epoch.get("obs_setup") or {}
         general_comments = str(obs_setup.get("general_comments", "") or "").strip() or "N/A"
-        
+        mandatory_night_flag = _is_truthy(obs_setup.get("mandatory_night_obs"))
+        avoid_sunrise_flag = _is_truthy(obs_setup.get("avoid_sunrise_sunset"))
+        if mandatory_night_flag:
+            mandatory_night_true_epochs += 1
+        if avoid_sunrise_flag:
+            avoid_sunrise_true_epochs += 1
+        if mandatory_night_flag or avoid_sunrise_flag:
+            night_constraint_epochs += 1
+
         print(f" Obs setup comments: {general_comments}")
         print(f"  - mandatory_night_obs : {obs_setup.get('mandatory_night_obs', 'N/A')}")
         print(f"  - avoid_sunrise_sunset: {obs_setup.get('avoid_sunrise_sunset', 'N/A')}")
@@ -1083,8 +1124,8 @@ def GetProjDuration(
         req_hours = requested_seconds / 3600.0
         diff_hours = observed_seconds / 3600.0 - req_hours
         print("\nRequested vs simulated on-target time:")
-        print(bblue(f" - Requested from master CSV: {req_hours:.3f} hrs"))
-        print(bblue(f" - Simulated from epochs    : {observed_seconds/3600.0:.3f} hrs"))
+        print(f" - Requested from master CSV: {req_hours:.3f} hrs")
+        print(f" - Simulated from epochs    : {observed_seconds/3600.0:.3f} hrs")
         if abs(diff_hours) <= 1e-3:
             print(bblue(" Requested on-target time matches the simulated total (within 0.001 hr)."))
         else:
@@ -1146,13 +1187,19 @@ def GetProjDuration(
         print(f" - Gaincal duration failures   : {gaincal_duration_fail_epochs}")
         print(f" - Gaincal bracketing failures : {gaincal_bracket_fail_epochs}")
         print(f" - BPcal-first failures        : {first_bpcal_fail_epochs}")
+        print("\nNight constraint counts:")
+        print(f" - mandatory_night_obs=True    : {mandatory_night_true_epochs}")
+        print(f" - avoid_sunrise_sunset=True   : {avoid_sunrise_true_epochs}")
+        print(f" - Either constraint True       : {night_constraint_epochs}")
+        other_epochs = max(len(epoch_files) - night_constraint_epochs, 0)
+        print(f" - SBs w/o time of day preference: {other_epochs}")
         if requested_seconds is not None:
             req_hours = requested_seconds / 3600.0
             sim_hours = observed_seconds / 3600.0
             diff_hours = sim_hours - req_hours
             print("\nRequested vs simulated on-target time:")
-            print(bblue(f" - Requested from master CSV: {req_hours:.3f} hrs"))
-            print(bblue(f" - Simulated from epochs    : {sim_hours:.3f} hrs"))
+            print(f" - Requested from master CSV: {req_hours:.3f} hrs")
+            print(f" - Simulated from epochs    : {sim_hours:.3f} hrs")
             if abs(diff_hours) <= 1e-3:
                 print(bblue(" Requested on-target time matches the simulated total (within 0.001 hr)."))
             else:
@@ -1165,18 +1212,14 @@ def GetProjDuration(
             max_pair = crossmatch_extremes.get("max")
             if min_pair:
                 print(
-                    bblue(
                         f" - Closest: {min_pair['epoch_name']} (epoch {min_pair['epoch_file']}) "
                         f"-> {min_pair['master_name']} (master) = {min_pair['sep_arcsec']:.3f}\""
-                    )
                 )
             if max_pair:
                 print(
-                    bblue(
                         f" - Farthest: {max_pair['epoch_name']} (epoch {max_pair['epoch_file']}) "
                         f"-> {max_pair['master_name']} (master) = {max_pair['sep_arcsec']:.3f}\""
                     )
-                )
         if band_durations:
             print("\nBand breakdown:")
             for band in sorted(band_durations.keys()):
