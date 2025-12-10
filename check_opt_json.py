@@ -28,6 +28,7 @@ import os
 import re
 import sys
 import traceback
+from contextlib import contextmanager
 from typing import Dict, List, Sequence
 
 import numpy as np
@@ -175,6 +176,20 @@ def _normalise_tags(raw_tags) -> List[str]:
     return [str(tag).strip().lower() for tag in tags if str(tag).strip()]
 
 
+def _build_category_lookup(targets: Sequence[dict]) -> Dict[str, dict]:
+    """Return a mapping of canonical target name -> {'name', 'category'}."""
+    lookup: Dict[str, dict] = {}
+    for entry in targets or []:
+        name = str(entry.get("name", "")).strip()
+        if not name:
+            continue
+        category = _categorise_target(entry.get("tags") or [])
+        key = _canonical_name(name)
+        if key and key not in lookup:
+            lookup[key] = {"name": name, "category": category}
+    return lookup
+
+
 def _fetch_epoch_targets(blocks: Sequence[dict]) -> List[dict]:
     """Extract per-block target metadata from an epoch JSON structure."""
     targets: List[dict] = []
@@ -191,6 +206,20 @@ def _fetch_epoch_targets(blocks: Sequence[dict]) -> List[dict]:
                 }
             )
     return targets
+
+
+def _categorise_target(tags: Sequence[str]) -> str:
+    """Return a coarse category label for a target based on its tags."""
+    tags = _normalise_tags(tags)
+    if "bpcal" in tags or "bandpass" in tags:
+        return "bpcal"
+    if "gaincal" in tags:
+        return "gaincal"
+    if "polcal" in tags or "polarisation" in tags or "polarization" in tags:
+        return "polcal"
+    if "target" in tags:
+        return "target"
+    return "other"
 
 
 def _load_epoch_json(path: str) -> dict:
@@ -323,12 +352,14 @@ def CheckSources(
 
     min_sep_dict = {record["name"]: float("inf") for record in master_records}
     unmatched_targets: List[tuple] = []
+    matched_pairs: List[dict] = []
+    best_match_per_master: Dict[str, dict] = {}
 
     for fpath, targets in epoch_targets.items():
         sci_targets = [
             target for target in targets if "target" in target.get("tags", [])
         ]
-        print(f"\n'{os.path.basename(csv0)}'  v.s. '{os.path.basename(fpath)}'")
+        # print(f"\n'{os.path.basename(csv0)}'  v.s. '{os.path.basename(fpath)}'")
         if not sci_targets:
             print(bblue(" No science targets listed in this epoch file."))
             continue
@@ -358,15 +389,27 @@ def CheckSources(
                 min_sep_dict[record["name"]] = min(
                     min_sep_dict[record["name"]], best_match["sep_arcsec"]
                 )
-                src_string = (
-                    f"{record['name']} RA: {record['ra']} DEC: {record['dec']} | "
-                    f"{epoch_target['name']} RA: {epoch_target['ra']} DEC: {epoch_target['dec']}, "
-                    f"sep: {best_match['sep_arcsec']:.6f}\" ({best_match['sep_arcmin']:.4f} arcmin)"
+                existing_best = best_match_per_master.get(record["name"])
+                if (existing_best is None) or (best_match["sep_arcsec"] < existing_best["sep_arcsec"]):
+                    best_match_per_master[record["name"]] = {
+                        "epoch_name": epoch_target["name"],
+                        "master_name": record["name"],
+                        "sep_arcsec": best_match["sep_arcsec"],
+                        "sep_arcmin": best_match["sep_arcmin"],
+                        "epoch_file": os.path.basename(fpath),
+                        "ra_master": record["ra"],
+                        "dec_master": record["dec"],
+                        "ra_epoch": epoch_target["ra"],
+                        "dec_epoch": epoch_target["dec"],
+                    }
+                matched_pairs.append(
+                    {
+                        "sep_arcsec": best_match["sep_arcsec"],
+                        "master_name": record["name"],
+                        "epoch_name": epoch_target["name"],
+                        "epoch_file": os.path.basename(fpath),
+                    }
                 )
-                if best_match["sep_arcsec"] <= 5.0:
-                    print(bblue(src_string))
-                else:
-                    print(redtext(src_string))
             else:
                 unmatched_targets.append((fpath, epoch_target["name"]))
                 print(
@@ -382,6 +425,19 @@ def CheckSources(
             print(bred(f" - {tgt} (epoch file {os.path.basename(fpath)})"))
     else:
         print(bblue("\nAll epoch science targets are present in the proposal catalogue."))
+
+    if best_match_per_master:
+        print("\nClosest epoch cross-match per master source:")
+        for name in sorted(best_match_per_master.keys()):
+            info = best_match_per_master[name]
+            base_str = (
+                f"{info['master_name']} (master) -> {info['epoch_name']} (epoch {info['epoch_file']}): "
+                f"{info['sep_arcsec']:.6f}\" ({info['sep_arcmin']:.4f} arcmin)"
+            )
+            printer = bblue if info["sep_arcsec"] <= 5.0 else redtext
+            print(printer(base_str))
+    else:
+        print(bred("\nNo matched epoch/master source pairs to report separations."))
 
     print(f"\n\n{'+' * 30}")
     print("Minimum separations between matched sources and their best epoch counterpart:")
@@ -407,9 +463,16 @@ def CheckSources(
 
     d0.to_csv(str(csv0), index=False)
     print(f"{'+' * 30}\n")
+    crossmatch_extremes = None
+    if matched_pairs:
+        min_pair = min(matched_pairs, key=lambda item: item["sep_arcsec"])
+        max_pair = max(matched_pairs, key=lambda item: item["sep_arcsec"])
+        crossmatch_extremes = {"min": min_pair, "max": max_pair}
+
     return {
         "unmatched_epoch_targets": [name for _, name in unmatched_targets],
         "updated_catalogue": csv0,
+        "crossmatch_extremes": crossmatch_extremes,
     }
 
 
@@ -429,6 +492,30 @@ def _extract_observed_duration(line: str, target: str) -> float:
     if match:
         return float(match.group(1))
     return 0.0
+
+
+def _find_first_tracked_source(
+    sim_lines: Sequence[str], name_categories: Dict[str, dict]
+) -> dict:
+    """Return info about the first tracked source encountered in the simulation log."""
+    name_keys = [
+        (value.get("name", key), key) for key, value in name_categories.items()
+    ]
+    for line in sim_lines:
+        if "Tracked" not in line:
+            continue
+        matched = _match_name_in_line(line, name_keys)
+        if matched:
+            entry = name_categories.get(_canonical_name(matched), {})
+            category = entry.get("category", "other") if isinstance(entry, dict) else entry
+            duration = _extract_tracked_duration(line, matched)
+            return {
+                "name": entry.get("name", matched) if isinstance(entry, dict) else matched,
+                "category": category,
+                "duration": duration,
+                "line": line,
+            }
+    return {}
 
 
 def _match_name_in_line(line: str, name_keys: List[tuple]) -> str:
@@ -540,13 +627,17 @@ def _report_gaincal_bracketing(
     target_lookup: Dict[str, dict],
     gain_lookup: Dict[str, dict],
     obs_start: p.Timestamp = None,
-) -> None:
-    """Check that each target scan is preceded and followed by gaincal scans and print context."""
+) -> bool:
+    """
+    Check that each target scan is preceded and followed by gaincal scans and print context.
+
+    Returns True when all target scans are bracketed by gaincal scans; False otherwise.
+    """
     target_names_for_check = targs or [entry["name"] for entry in target_lookup.values()]
     gaincal_names_for_check = gcals or [entry["name"] for entry in gain_lookup.values()]
     if not target_names_for_check or not gaincal_names_for_check:
         print(redtext("Insufficient target/gaincal names to check scan ordering."))
-        return
+        return False
     problematic_scans = _find_unbracketed_targets(
         sim_lines, target_names_for_check, gaincal_names_for_check, obs_start
     )
@@ -560,8 +651,9 @@ def _report_gaincal_bracketing(
             delta_min = item["delta_sec"] / 60.0 if item["delta_sec"] is not None else None
             timing = f"{delta_min:.2f} min from obs start" if delta_min is not None else "time from obs start unknown"
             print(bred(f"  {idx}{_ordinal_suffix(idx)} target scan ({timing}): {item['line']}"))
-    else:
-        print(bblue(" All target scans are preceded and followed by gaincal scans."))
+        return False
+    print(bblue(" All target scans are preceded and followed by gaincal scans."))
+    return True
 
 
 def GetProjDuration(
@@ -618,6 +710,12 @@ def GetProjDuration(
     overlap_candidates: List[dict] = []
     target_declinations: Dict[str, List[float]] = {}
     unique_science_targets = set()
+    lst_span_records: List[dict] = []
+    epoch_science_targets: Dict[str, set] = {}
+    target_band_seconds: Dict[str, Dict[str, float]] = {}
+    gaincal_duration_fail_epochs = 0
+    gaincal_bracket_fail_epochs = 0
+    first_bpcal_fail_epochs = 0
 
     for epoch in epoch_data:
         gscans: List[float] = []
@@ -641,6 +739,11 @@ def GetProjDuration(
         bracketing_reported = False
         bp_pol_header_printed = False
         epoch_endline = ""
+        name_category_lookup = _build_category_lookup(epoch["targets"])
+        first_tracked_info = _find_first_tracked_source(epoch["simulation_lines"], name_category_lookup)
+        epoch_gaincal_duration_ok: bool = None  # type: ignore
+        epoch_bracketing_ok: bool = None  # type: ignore
+        epoch_first_bpcal_ok: bool = None  # type: ignore
 
         print(f"\n{'*' * 30}\nEPOCH FILE: {fname}\n{'*' * 30}")
         instrument = epoch.get("instrument") or {}
@@ -678,6 +781,31 @@ def GetProjDuration(
             print(f" LST span: {lst_start} -> {lst_end} (duration unavailable)")
         obs_type = epoch.get("observation_type") or "N/A"
         print(f" Observation type: {obs_type}")
+        lst_span_records.append(
+            {
+                "file": fname,
+                "start": lst_start,
+                "end": lst_end,
+                "duration_hours": lst_hours,
+            }
+        )
+        if first_tracked_info:
+            duration_min = first_tracked_info.get("duration", 0.0) / 60.0
+            category = first_tracked_info.get("category", "other")
+            if category == "bpcal":
+                print(bblue(f" First tracked source is BPcal '{first_tracked_info['name']}' ({duration_min:.2f} min)"))
+                epoch_first_bpcal_ok = True
+            else:
+                print(
+                    bred(
+                        f" First tracked source is NOT a BPcal (got '{first_tracked_info['name']}', category '{category}', "
+                        f"{duration_min:.2f} min)"
+                    )
+                )
+                epoch_first_bpcal_ok = False
+        else:
+            print(bred(" Could not identify the first tracked astronomical source in the simulation log."))
+            epoch_first_bpcal_ok = False
 
         sci = 0
         current_time = 0.0
@@ -704,7 +832,7 @@ def GetProjDuration(
                 targs = _safe_literal_list(line.split("targets are", 1)[1])
                 print(f" Target names list : {targs}")
                 if not bracketing_reported and gcals:
-                    _report_gaincal_bracketing(
+                    epoch_bracketing_ok = _report_gaincal_bracketing(
                         epoch["simulation_lines"], targs, gcals, target_lookup, gain_lookup, epoch_start_dt
                     )
                     bracketing_reported = True
@@ -718,7 +846,7 @@ def GetProjDuration(
                 gcals = _safe_literal_list(line.split("GAIN calibrators are", 1)[1])
                 print(f" Gaincals names list : {gcals}")
                 if targs and not bracketing_reported:
-                    _report_gaincal_bracketing(
+                    epoch_bracketing_ok = _report_gaincal_bracketing(
                         epoch["simulation_lines"], targs, gcals, target_lookup, gain_lookup, epoch_start_dt
                     )
                     bracketing_reported = True
@@ -767,6 +895,8 @@ def GetProjDuration(
                 if dur:
                     sci += 1
                     lsc.append(dur)
+                    tgt_entry = target_band_seconds.setdefault(tgt, {})
+                    tgt_entry[band_label] = tgt_entry.get(band_label, 0.0) + dur
                     if show_targ_scans:
                         print(f"\t > {tgt} scan {sci} length: {dur/60.:.1f} min")
 
@@ -785,6 +915,32 @@ def GetProjDuration(
                 print(bblue(f"\tNumber of gaincal scans: {len(gscans):d} = {np.nansum(gscans)/60.:.1f} min"))
                 print(bblue(f"\tNumber of POLcal scans : {len(pscans):d} = {np.nansum(pscans)/60.:.1f} min"))
                 print(bblue(f"\tNumber of target scans : {len(lsc):d} = {np.nansum(lsc)/60.:.1f} min"))
+
+        if gscans:
+            tol_seconds = 5.0
+            all_two_min = all(abs(dur - 120.0) <= tol_seconds for dur in gscans)
+            if all_two_min:
+                print(
+                    bblue(
+                        f" Gaincal scan duration check: all {len(gscans)} scans ~2 min "
+                        f"(mean {np.nanmean(gscans)/60.:.2f} min)"
+                    )
+                )
+                epoch_gaincal_duration_ok = True
+            else:
+                print(
+                    bred(
+                        f" Gaincal scan duration check FAILED: expected 2.00 min, "
+                        f"found min/max {np.nanmin(gscans)/60.:.2f}/{np.nanmax(gscans)/60.:.2f} min"
+                    )
+                )
+                off_vals = [f"{dur/60.:.2f}" for dur in gscans if abs(dur - 120.0) > tol_seconds]
+                if off_vals:
+                    print(bred(f"  Offending durations (min): {', '.join(off_vals)}"))
+                epoch_gaincal_duration_ok = False
+        else:
+            print(bred(" Gaincal scan duration check skipped: no gaincal scans found."))
+            epoch_gaincal_duration_ok = False
 
         if len(bp_scan_times) > 1:
             print(bblue("\tTime between BPcal scans:"))
@@ -811,6 +967,12 @@ def GetProjDuration(
         all_bp_scans.extend(bpscans)
         all_pol_scans.extend(pscans)
         band_durations[band_label] = band_durations.get(band_label, 0.0) + epoch_duration_hr
+        if epoch_gaincal_duration_ok is not True:
+            gaincal_duration_fail_epochs += 1
+        if epoch_bracketing_ok is not True:
+            gaincal_bracket_fail_epochs += 1
+        if epoch_first_bpcal_ok is not True:
+            first_bpcal_fail_epochs += 1
         for entry in epoch.get("targets", []):
             if "target" in entry.get("tags", []):
                 name = str(entry.get("name", "")).strip()
@@ -819,6 +981,11 @@ def GetProjDuration(
                     dec_val = _dec_to_degrees(entry.get("dec"))
                     if dec_val is not None:
                         target_declinations.setdefault(name, []).append(dec_val)
+        epoch_science_targets[fname] = {
+            str(entry.get("name", "")).strip()
+            for entry in epoch.get("targets", [])
+            if "target" in entry.get("tags", []) and str(entry.get("name", "")).strip()
+        }
 
         # Collect info for overlapping observations with the same target(s).
         if epoch_start_dt is not None and epoch_duration_hr and targs:
@@ -908,6 +1075,20 @@ def GetProjDuration(
     print(bred(f"\n**** TOTAL time on target for all epochs: {Tth} hrs"))
     print(bred(f"**** TOTAL PROJECT TIME                 : {Tmm/60.:.1f} Hrs "))
     print(bred(f"**** TOTAL PROJECT TIME - 25% overheads : {(Tmm/60.)/(1.25):.1f} Hrs "))
+    requested_seconds = _sum_requested_time(master_csv)
+    observed_seconds = Tth * 3600.0
+    if requested_seconds is not None:
+        req_hours = requested_seconds / 3600.0
+        diff_hours = observed_seconds / 3600.0 - req_hours
+        print("\nRequested vs simulated on-target time:")
+        print(bblue(f" - Requested from master CSV: {req_hours:.3f} hrs"))
+        print(bblue(f" - Simulated from epochs    : {observed_seconds/3600.0:.3f} hrs"))
+        if abs(diff_hours) <= 1e-3:
+            print(bblue(" Requested on-target time matches the simulated total (within 0.001 hr)."))
+        else:
+            print(bred(f" Requested vs simulated mismatch: {diff_hours:+.3f} hrs"))
+    else:
+        print(bred("\nRequested on-target time could not be computed from master CSV."))
     print(bred(f"{'*' * 50}\n"))
     if band_durations:
         print(bblue("Time per instrument band:"))
@@ -937,12 +1118,15 @@ def GetProjDuration(
         total_project_hours = Tmm / 60.0
         mean_target_time = Tth / float(len(epoch_files)) if epoch_files else 0.0
         unmatched_count = len(source_check_result.get("unmatched_epoch_targets", []))
+        crossmatch_extremes = source_check_result.get("crossmatch_extremes")
         all_decs = [deg for values in target_declinations.values() for deg in values]
         near_limit_targets = sorted(
-            name for name, decs in target_declinations.items() if any(abs(dec - 40.0) <= 10.0 for dec in decs)
+            (name, decs)
+            for name, decs in target_declinations.items()
+            if any(abs(dec - 40.0) <= 15.0 for dec in decs)
         )
         north_of_limit_targets = sorted(
-            name for name, decs in target_declinations.items() if any(dec > 42.0 for dec in decs)
+            name for name, decs in target_declinations.items() if any(dec > 40.0 for dec in decs)
         )
 
         print()
@@ -956,6 +1140,41 @@ def GetProjDuration(
         print(f" - Mean on-target time per epoch: {mean_target_time:.3f}")
         print(f" - Total project time           : {total_project_hours:.3f}")
         print(f" - Project time minus 25% ovhds : {(total_project_hours/1.25):.3f}")
+        print("\nQuality checks (epoch counts):")
+        print(f" - Gaincal duration failures   : {gaincal_duration_fail_epochs}")
+        print(f" - Gaincal bracketing failures : {gaincal_bracket_fail_epochs}")
+        print(f" - BPcal-first failures        : {first_bpcal_fail_epochs}")
+        if requested_seconds is not None:
+            req_hours = requested_seconds / 3600.0
+            sim_hours = observed_seconds / 3600.0
+            diff_hours = sim_hours - req_hours
+            print("\nRequested vs simulated on-target time:")
+            print(bblue(f" - Requested from master CSV: {req_hours:.3f} hrs"))
+            print(bblue(f" - Simulated from epochs    : {sim_hours:.3f} hrs"))
+            if abs(diff_hours) <= 1e-3:
+                print(bblue(" Requested on-target time matches the simulated total (within 0.001 hr)."))
+            else:
+                print(bred(f" Requested vs simulated mismatch: {diff_hours:+.3f} hrs"))
+        else:
+            print(bred("\nRequested on-target time could not be computed from master CSV."))
+        if crossmatch_extremes:
+            print("\nCross-match separation extremes:")
+            min_pair = crossmatch_extremes.get("min")
+            max_pair = crossmatch_extremes.get("max")
+            if min_pair:
+                print(
+                    bblue(
+                        f" - Closest: {min_pair['epoch_name']} (epoch {min_pair['epoch_file']}) "
+                        f"-> {min_pair['master_name']} (master) = {min_pair['sep_arcsec']:.3f}\""
+                    )
+                )
+            if max_pair:
+                print(
+                    bblue(
+                        f" - Farthest: {max_pair['epoch_name']} (epoch {max_pair['epoch_file']}) "
+                        f"-> {max_pair['master_name']} (master) = {max_pair['sep_arcsec']:.3f}\""
+                    )
+                )
         if band_durations:
             print("\nBand breakdown:")
             for band in sorted(band_durations.keys()):
@@ -966,19 +1185,59 @@ def GetProjDuration(
             print("\nDeclination coverage (science targets):")
             print(f" - Range: {min(all_decs):.2f} deg to {max(all_decs):.2f} deg")
             if near_limit_targets:
+                formatted_near = []
+                for name, decs in near_limit_targets:
+                    unique_decs = sorted({dec for dec in decs})
+                    dec_list = ", ".join(f"{dec:.2f}" for dec in unique_decs)
+                    formatted_near.append(f"{name} ({dec_list})")
                 print(
-                    f" - Targets within 10 deg of +40: {len(near_limit_targets)} -> "
-                    f"{', '.join(near_limit_targets)}"
+                    f" - Targets within 15 deg of +40: {len(near_limit_targets)} -> "
+                    f"{', '.join(formatted_near)}"
                 )
             else:
-                print(" - Targets within 10 deg of +40: 0")
+                print(" - Targets within 15 deg of +40: 0")
             if north_of_limit_targets:
                 print(
-                    f" - Targets north of +42 (unobservable): {len(north_of_limit_targets)} -> "
+                    f" - Targets north of +40 (unobservable): {len(north_of_limit_targets)} -> "
                     f"{', '.join(north_of_limit_targets)}"
                 )
             else:
-                print(" - Targets north of +42 (unobservable): 0")
+                print(" - Targets north of +40 (unobservable): 0")
+        if target_band_seconds:
+            print("\nTime on target per band (hours):")
+            for tgt in sorted(target_band_seconds.keys()):
+                entries = target_band_seconds[tgt]
+                band_strings = [f"{band.capitalize()}: {seconds/3600.:.3f}" for band, seconds in sorted(entries.items())]
+                print(f" - {tgt}: " + "; ".join(band_strings))
+        if lst_span_records:
+            valid_spans = [rec for rec in lst_span_records if rec["duration_hours"] is not None]
+            if valid_spans:
+                min_span = min(rec["duration_hours"] for rec in valid_spans)
+                max_span = max(rec["duration_hours"] for rec in valid_spans)
+                print("\nLST span coverage:")
+                print(f" - Range (hrs): {min_span:.2f} to {max_span:.2f}")
+                shortest_epochs = [rec for rec in valid_spans if rec["duration_hours"] == min_span]
+                for rec in shortest_epochs:
+                    print(
+                        f" - Shortest LST start epoch: {rec['file']} [{rec['start']} -> {rec['end']}, "
+                        f"{rec['duration_hours']:.2f} hrs]"
+                    )
+                    base_targets = epoch_science_targets.get(rec["file"], set())
+                    shared = []
+                    for other_file, targets in epoch_science_targets.items():
+                        if other_file == rec["file"]:
+                            continue
+                        common_targets = sorted(base_targets & targets)
+                        if common_targets:
+                            shared.append((other_file, common_targets))
+                    if shared:
+                        print("   Shared science targets with:")
+                        for other_file, common_targets in shared:
+                            print(f"    - {other_file}: {', '.join(common_targets)}")
+                    else:
+                        print("   No other epochs share science targets with this shortest-LST epoch.")
+            else:
+                print("\nLST span coverage: no valid LST start/end values available.")
         if unmatched_count:
             print(
                 f"\nEpoch targets missing from master catalogue: {unmatched_count} "
@@ -1008,6 +1267,63 @@ def _expand_patterns(patterns: Sequence[str]) -> List[str]:
         else:
             print(redtext(f"Warning: '{pattern}' did not match any files."), file=sys.stderr)
     return files
+
+
+def _derive_log_path(epoch_files: Sequence[str]) -> str:
+    """Return the path to the run log beside the supplied epoch JSON files."""
+    if not epoch_files:
+        return "OPT_SBsummary.md"
+    abs_paths = [os.path.abspath(f) for f in epoch_files]
+    dirs = {os.path.dirname(path) or "." for path in abs_paths}
+    log_dir = sorted(dirs)[0]
+    return os.path.join(log_dir, "OPT_SBsummary.md")
+
+
+def _strip_ansi(text: str) -> str:
+    """Remove ANSI escape sequences for log cleanliness."""
+    return re.sub(r"\x1b\[[0-9;]*m", "", text)
+
+
+@contextmanager
+def _tee_stdout(log_path: str):
+    """Mirror stdout to a markdown log file while preserving on-screen output."""
+    original_stdout = sys.stdout
+    with open(log_path, "w") as log_file:
+        class _StdoutTee:
+            def write(self, data):
+                original_stdout.write(data)
+                log_file.write(_strip_ansi(data))
+                return len(data)
+
+            def flush(self):
+                original_stdout.flush()
+                log_file.flush()
+
+        sys.stdout = _StdoutTee()
+        try:
+            yield
+        finally:
+            sys.stdout = original_stdout
+
+
+def _sum_requested_time(master_csv: str):
+    """
+    Return the total requested time on target in seconds from the master CSV.
+
+    Returns None if the column is missing or cannot be read.
+    """
+    try:
+        df = p.read_csv(master_csv)
+    except Exception as exc:
+        print(bred(f"Could not read master CSV '{master_csv}': {exc}"))
+        return None
+    column = "Time on Target (seconds)"
+    if column not in df.columns:
+        print(bred(f"Column '{column}' not found in master CSV; requested time unavailable."))
+        return None
+    values = p.to_numeric(df[column], errors="coerce")
+    total_seconds = float(values.sum(skipna=True))
+    return total_seconds
 
 
 def parse_args():
@@ -1059,15 +1375,22 @@ def main():
     if not epoch_files:
         print(redtext("No epoch JSON files available after glob expansion."), file=sys.stderr)
         sys.exit(1)
-    GetProjDuration(
-        master_csv=args.master_csv,
-        epoch_files=sorted(epoch_files),
-        proj_description=args.proj_description,
-        show_targ_scans=args.show_target_scans,
-        name_column=args.name_column,
-        ra_column=args.ra_column,
-        dec_column=args.dec_column,
-    )
+    epoch_files = sorted(epoch_files)
+    log_path = _derive_log_path(epoch_files)
+    with _tee_stdout(log_path):
+        print(bblue(f"Logging output to: {log_path}"))
+        if len({os.path.dirname(os.path.abspath(f)) or "." for f in epoch_files}) > 1:
+            print(redtext("Note: epoch JSON files span multiple directories; log placed with the first directory."))
+        GetProjDuration(
+            master_csv=args.master_csv,
+            epoch_files=epoch_files,
+            proj_description=args.proj_description,
+            show_targ_scans=args.show_target_scans,
+            name_column=args.name_column,
+            ra_column=args.ra_column,
+            dec_column=args.dec_column,
+        )
+    print(bblue(f"Run log saved to: {log_path}"))
 
 
 if __name__ == "__main__":
