@@ -1,22 +1,10 @@
 #!/usr/bin/env python3
 """
-Audit Open Time proposal schedule blocks using JSON epoch files exported from the OPT.
-The user must first 'simulate' each schedule block in the OPT and save the resulting JSON
-files locally. These files contain the detailed observation sequence and timing information
-needed for this analysis.
-
-The script reads a master proposal target list in CSV format, then for each JSON epoch file:
-it parses the simulation log embedded in each JSON, tallies target/calibrator scan
-lengths across all epochs, and checks that every science target scheduled in the JSON
-is listed in the master proposal catalogue (CSV). The catalogue file is updated in-place
-with Notes describing which epoch(s) use each source.
-
-Example:
-
-    python check_opt_json.py \\
-        --master-csv 2025/observations/testing/targets-SCI-20241101-SB-01.csv \\
-        --epoch-json 2025/observations/testing/SCI-20241101-SB-01_*.json \\
-        --show-target-scans
+Audit OPT epoch JSONs against a master proposal CSV: parses simulation logs, tallies scan
+durations, checks gaincal bracketing and durations, verifies first scan is BPcal, compares
+total on-target time to requested time, cross-matches epoch targets to the master list
+(by name or coordinates) and updates Notes, reports separation extremes, band/LST coverage,
+overlap checks, and writes a markdown log alongside the JSONs.
 """
 
 import argparse
@@ -321,6 +309,7 @@ def CheckSources(
     where each source appears, and a summary of positional separations is printed.
     """
     print("\n ******\n TARGET NAMES & COORDINATES checks\n ******")
+    CROSSMATCH_MAX_ARCSEC = 300.0  # fallback max separation (5 arcmin) for coord-only matches
 
     d0 = p.read_csv(str(csv0))
     if not len(d0.columns):
@@ -338,6 +327,9 @@ def CheckSources(
 
     if "Notes" not in d0.columns:
         d0["Notes"] = ""
+    else:
+        # Ensure Notes column can store strings to avoid pandas dtype warnings.
+        d0["Notes"] = d0["Notes"].astype(object)
 
     master_records = []
     for idx, row in d0.iterrows():
@@ -366,19 +358,29 @@ def CheckSources(
 
         for epoch_target in sci_targets:
             best_match = None
+            best_match_by_sep = None
             for record in master_records:
+                sep = separation_radec(
+                    record["ra"], record["dec"], epoch_target["ra"], epoch_target["dec"]
+                )
+                if np.isnan(sep[1]):
+                    continue
                 if target_true(record["name"], epoch_target["name"]):
-                    sep = separation_radec(
-                        record["ra"], record["dec"], epoch_target["ra"], epoch_target["dec"]
-                    )
-                    if np.isnan(sep[1]):
-                        continue
                     if (best_match is None) or (sep[1] < best_match["sep_arcsec"]):
                         best_match = {
                             "record": record,
                             "sep_arcsec": sep[1],
                             "sep_arcmin": sep[1] / 60.0,
                         }
+                if (best_match_by_sep is None) or (sep[1] < best_match_by_sep["sep_arcsec"]):
+                    best_match_by_sep = {
+                        "record": record,
+                        "sep_arcsec": sep[1],
+                        "sep_arcmin": sep[1] / 60.0,
+                    }
+
+            if not best_match and best_match_by_sep and best_match_by_sep["sep_arcsec"] <= CROSSMATCH_MAX_ARCSEC:
+                best_match = best_match_by_sep
 
             if best_match:
                 record = best_match["record"]
